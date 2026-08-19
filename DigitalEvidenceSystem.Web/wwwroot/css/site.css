@@ -203,3 +203,23 @@
         grid-template-columns: 1fr;
     }
 }
+
+.notification-nav { position: relative; }
+
+.notification-count {
+    display: inline-grid;
+    min-width: 19px;
+    height: 19px;
+    place-items: center;
+    margin-left: auto;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #f06c78;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.notice-mark.info { background: #eeebff; color: #634ad4; }
+.notice-mark.warning { background: #fff2dd; color: #b97612; }
