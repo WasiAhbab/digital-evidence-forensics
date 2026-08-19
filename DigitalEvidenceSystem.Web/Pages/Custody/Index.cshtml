@@ -1,0 +1,6 @@
+@page
+@model DigitalEvidenceSystem.Web.Pages.Custody.IndexModel
+@{ViewData["Title"]="Chain of custody";}
+<header class="page-head"><div><span class="eyebrow">AUDITABLE TRANSFERS</span><h1>Chain of custody</h1><p>Chronological handovers provide an accountable evidence lifecycle.</p></div><a class="primary link-button" asp-page="Create">+ Record transfer</a></header>
+<div class="notice security-notice"><strong>Historical records are append-only.</strong><span>There are no edit or delete actions for custody entries.</span></div>
+<section class="panel table-panel"><table><thead><tr><th>Evidence</th><th>From</th><th>To</th><th>Purpose</th><th>Location</th><th>Condition</th><th>Transferred</th></tr></thead><tbody>@foreach(var item in Model.Items){<tr><td><b>@item.EvidenceItem?.EvidenceNumber</b><small>@item.EvidenceItem?.Name</small></td><td>@item.FromPerson</td><td>@item.ToPerson</td><td>@item.Purpose</td><td>@(string.IsNullOrWhiteSpace(item.Location)?"—":item.Location)</td><td>@item.Condition</td><td>@item.TransferredAt.ToString("dd MMM yyyy, HH:mm")<small>Recorded @item.RecordedAt.ToString("dd MMM yyyy, HH:mm")</small></td></tr>}</tbody></table>@if(!Model.Items.Any()){<p class="empty">No custody transfers recorded yet.</p>}</section>

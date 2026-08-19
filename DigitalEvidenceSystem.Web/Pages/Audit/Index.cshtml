@@ -1,0 +1,6 @@
+@page
+@model DigitalEvidenceSystem.Web.Pages.Audit.IndexModel
+@{ViewData["Title"]="Audit Logs";}
+<header class="page-head"><div><span class="eyebrow">IMMUTABLE-STYLE HISTORY</span><h1>Audit logs</h1><p>Review important system actions with actor, entity, time and network context.</p></div></header>
+<form class="toolbar" method="get"><input name="q" value="@Model.Query" placeholder="Search actor, entity or details"/><input name="action" value="@Model.Action" placeholder="Filter by action"/><button class="secondary">Filter</button></form>
+<section class="panel table-panel"><table><thead><tr><th>Timestamp</th><th>Actor</th><th>Action</th><th>Entity</th><th>Details</th><th>IP</th></tr></thead><tbody>@foreach(var item in Model.Items){<tr><td>@item.OccurredAt.ToString("dd MMM yyyy, HH:mm:ss")</td><td>@item.Actor</td><td><span class="badge">@item.Action</span></td><td>@item.Entity @if(!string.IsNullOrWhiteSpace(item.EntityId)){<small>#@item.EntityId</small>}</td><td>@item.Details</td><td>@(string.IsNullOrWhiteSpace(item.IpAddress)?"—":item.IpAddress)</td></tr>}</tbody></table></section>

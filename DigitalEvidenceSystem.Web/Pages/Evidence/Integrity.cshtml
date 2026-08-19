@@ -1,0 +1,6 @@
+@page "{id:int}"
+@model DigitalEvidenceSystem.Web.Pages.Evidence.IntegrityModel
+@{ViewData["Title"]="Integrity verification";}
+<header class="page-head"><div><span class="eyebrow">HASH & INTEGRITY</span><h1>@Model.Item.EvidenceNumber integrity</h1><p>Verify the stored SHA-256 values against the current evidence files.</p></div><a class="secondary link-button" asp-page="Edit" asp-route-id="@Model.Item.Id">Back</a></header>
+<section class="integrity-hero"><div><small>Current status</small><strong class="integrity-@Model.Item.IntegrityStatus.ToLower().Replace(" ","-")">@Model.Item.IntegrityStatus</strong></div><form method="post"><button class="primary">Verify all files</button></form></section>
+@if(Model.Results.Any()){<section class="panel table-panel"><table><thead><tr><th>File</th><th>Expected</th><th>Current</th><th>Result</th></tr></thead><tbody>@foreach(var r in Model.Results){<tr><td><b>@r.File</b></td><td><code class="hash">@r.Expected</code></td><td><code class="hash">@r.Actual</code></td><td><span class="status @(r.Match?"status-completed":"status-closed")">@(r.Match?"Verified":"Mismatch")</span></td></tr>}</tbody></table></section>}

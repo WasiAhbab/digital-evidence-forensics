@@ -1,0 +1,239 @@
+@page
+@model DigitalEvidenceSystem.Web.Pages.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<header class="topbar dashboard-hero">
+    <div class="hero-copy">
+        <span class="eyebrow">OPERATIONS OVERVIEW</span>
+        <h1>
+            Welcome back, @(User.Identity?.Name?.Split(' ')[0] ?? "there")
+            <span aria-hidden="true">👋</span>
+        </h1>
+        <p>
+            Monitor investigations, evidence integrity, and forensic work from one
+            calm, secure workspace.
+        </p>
+    </div>
+
+    <form method="get" class="search" role="search">
+        <label class="sr-only" for="dashboard-search">Search evidence or cases</label>
+        <input id="dashboard-search"
+               name="q"
+               value="@Model.Query"
+               placeholder="Search evidence, cases…" />
+        <button type="submit" aria-label="Search">⌕</button>
+    </form>
+</header>
+
+@if (!string.IsNullOrEmpty(Model.Query))
+{
+    <div class="notice">
+        Search results for <b>“@Model.Query”</b>: @Model.SearchResults.Count item(s) found.
+        <a asp-page="/Index">Clear</a>
+    </div>
+}
+
+<section class="metrics" aria-label="Investigation summary">
+    <article class="metric">
+        <span class="icon" aria-hidden="true">▣</span>
+        <div>
+            <small>Total evidence</small>
+            <strong>@Model.EvidenceCount</strong>
+            <em>registered items</em>
+        </div>
+    </article>
+
+    <article class="metric">
+        <span class="icon blue" aria-hidden="true">▤</span>
+        <div>
+            <small>Active cases</small>
+            <strong>@Model.ActiveCases</strong>
+            <em>@Model.ClosedCases closed</em>
+        </div>
+    </article>
+
+    <article class="metric">
+        <span class="icon green" aria-hidden="true">⌕</span>
+        <div>
+            <small>Pending analysis</small>
+            <strong>@Model.PendingAnalysis</strong>
+            <em>needs examination</em>
+        </div>
+    </article>
+
+    <article class="metric">
+        <span class="icon orange" aria-hidden="true">✓</span>
+        <div>
+            <small>Integrity attention</small>
+            <strong>@Model.UnverifiedIntegrity</strong>
+            <em>verify when ready</em>
+        </div>
+    </article>
+</section>
+
+<section class="action-area" aria-labelledby="quick-actions-title">
+    <div class="section-heading">
+        <div>
+            <span class="eyebrow">WORKSPACE TOOLS</span>
+            <h2 id="quick-actions-title">Start a task</h2>
+        </div>
+        <p>Choose what you need to do next.</p>
+    </div>
+
+    <nav class="quick-actions" aria-label="Quick actions">
+        <a asp-page="/Cases/Create">
+            <span aria-hidden="true">＋</span>
+            <div>
+                <b>Open case</b>
+                <small>Create a new investigation</small>
+            </div>
+            <i aria-hidden="true">→</i>
+        </a>
+
+        <a asp-page="/Evidence/Create">
+            <span aria-hidden="true">▣</span>
+            <div>
+                <b>Add evidence</b>
+                <small>Register an evidence item</small>
+            </div>
+            <i aria-hidden="true">→</i>
+        </a>
+
+        <a asp-page="/Custody/Create">
+            <span aria-hidden="true">⇄</span>
+            <div>
+                <b>Record transfer</b>
+                <small>Update chain of custody</small>
+            </div>
+            <i aria-hidden="true">→</i>
+        </a>
+
+        <a asp-page="/Analysis/Create">
+            <span aria-hidden="true">⌕</span>
+            <div>
+                <b>Start analysis</b>
+                <small>Assign an examination</small>
+            </div>
+            <i aria-hidden="true">→</i>
+        </a>
+
+        <a asp-page="/Reports/Index">
+            <span aria-hidden="true">▥</span>
+            <div>
+                <b>Generate report</b>
+                <small>Review printable reports</small>
+            </div>
+            <i aria-hidden="true">→</i>
+        </a>
+    </nav>
+</section>
+
+<section class="dashboard-grid">
+    <div class="panel wide">
+        <div class="panel-head">
+            <div>
+                <h2>Evidence overview</h2>
+                <p>Registered evidence by type</p>
+            </div>
+            <a asp-page="/Evidence/Index">Manage evidence →</a>
+        </div>
+
+        <div class="chart">
+            <div class="chart-labels">
+                <span>@Model.EvidenceCount</span>
+                <span>@Math.Max(1, Model.EvidenceCount / 2)</span>
+                <span>0</span>
+            </div>
+
+            <div class="bars">
+                @foreach (var item in Model.Types.Take(6))
+                {
+                    <div>
+                        <i style="height:@(Math.Max(12, item.Count * 100 / Math.Max(1, Model.EvidenceCount)))%"></i>
+                        <small>@item.Type</small>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h2>Recent activity</h2>
+                <p>Latest audited actions</p>
+            </div>
+            <a asp-page="/Audit/Index">View all</a>
+        </div>
+
+        @foreach (var item in Model.RecentActivity)
+        {
+            <div class="activity">
+                <span>•</span>
+                <div>
+                    <b>@item.Action</b>
+                    <small>@item.Actor · @item.Details</small>
+                </div>
+                <time>@item.OccurredAt.ToString("HH:mm")</time>
+            </div>
+        }
+
+        @if (!Model.RecentActivity.Any())
+        {
+            <p class="empty">No activity yet.</p>
+        }
+    </div>
+
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h2>Evidence requiring attention</h2>
+                <p>Review intake and integrity state</p>
+            </div>
+            <a asp-page="/Evidence/Index">View</a>
+        </div>
+
+        @foreach (var item in Model.Attention)
+        {
+            <div class="case-row">
+                <span class="folder">!</span>
+                <div>
+                    <b>@item.EvidenceNumber</b>
+                    <small>@item.Name</small>
+                </div>
+                <span class="status status-@(item.IntegrityStatus == "Hash mismatch" ? "closed" : "pending")">
+                    @(item.IntegrityStatus == "Verified" ? item.Status : item.IntegrityStatus)
+                </span>
+            </div>
+        }
+
+        @if (!Model.Attention.Any())
+        {
+            <p class="empty">No evidence requires attention.</p>
+        }
+    </div>
+
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h2>Active cases</h2>
+                <p>Investigations updated recently</p>
+            </div>
+            <a asp-page="/Cases/Index">View all</a>
+        </div>
+
+        @foreach (var item in Model.RecentCases)
+        {
+            <div class="case-row">
+                <span class="folder">□</span>
+                <div>
+                    <b>@item.CaseNumber</b>
+                    <small>@item.Title</small>
+                </div>
+                <span class="badge">@item.Status</span>
+            </div>
+        }
+    </div>
+</section>

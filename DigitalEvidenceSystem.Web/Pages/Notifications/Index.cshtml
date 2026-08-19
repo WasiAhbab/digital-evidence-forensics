@@ -1,0 +1,5 @@
+@page
+@model DigitalEvidenceSystem.Web.Pages.Notifications.IndexModel
+@{ViewData["Title"]="Notifications";}
+<header class="page-head"><div><span class="eyebrow">WORKSPACE ALERTS</span><h1>Notifications</h1><p>Stay ahead of evidence, analysis and case actions that need attention.</p></div></header>
+<section class="notification-list">@foreach(var n in Model.Items){<article class="notification @(n.IsRead?"read":"unread")"><div class="notice-mark @n.Severity.ToLower()">@(n.Severity=="Warning"?"!":"•")</div><div><b>@n.Title</b><p>@n.Message</p><small>@n.CreatedAt.ToString("dd MMM yyyy, HH:mm")</small></div>@if(!n.IsRead){<form method="post" asp-page-handler="Read"><input type="hidden" name="id" value="@n.Id"/><button class="secondary">Mark read</button></form>}</article>}@if(!Model.Items.Any()){<div class="panel empty-state"><strong>You're all caught up.</strong><p>No notifications require your attention.</p></div>}</section>
