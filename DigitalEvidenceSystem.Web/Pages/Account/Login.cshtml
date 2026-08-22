@@ -1,4 +1,172 @@
 @page
 @model DigitalEvidenceSystem.Web.Pages.Account.LoginModel
 @{ ViewData["Title"] = "Sign in"; }
-<section class="login-shell"><div class="login-art"><div class="brand"><span class="shield">✦</span><span><b>TRACELOCK</b><small>Digital Evidence System</small></span></div><div class="login-copy"><span class="eyebrow">SECURE EVIDENCE WORKSPACE</span><h1>Clarity for every<br/>piece of evidence.</h1><p>Organize cases, protect custody records, and keep your investigation moving.</p></div><div class="assurance">✓ Private local database &nbsp;&nbsp; ✓ Tamper-aware workflow</div></div><div class="login-card-wrap"><form method="post" class="login-card"><span class="eyebrow">WELCOME BACK</span><h1>Sign in</h1><p>Use your account to access the workspace.</p><div asp-validation-summary="ModelOnly" class="validation"></div><label>Username<input asp-for="Input.Username" autocomplete="username" placeholder="Enter your username" autofocus /></label><label>Password<input asp-for="Input.Password" type="password" autocomplete="current-password" placeholder="Enter your password" /></label><label class="check"><input asp-for="Input.RememberMe"/> Keep me signed in</label><button class="primary" type="submit">Sign in <span>→</span></button><div class="demo"><b>Demo account</b><span>admin &nbsp; / &nbsp; Admin@123!</span></div></form></div></section>
+
+<section class="login-shell">
+    <div class="login-art">
+        <div class="brand">
+            <span class="shield">✦</span>
+            <span>
+                <b>TRACELOCK</b>
+                <small>Digital Evidence System</small>
+            </span>
+        </div>
+
+        <div class="login-copy">
+            <span class="eyebrow">SECURE EVIDENCE WORKSPACE</span>
+            <h1>Clarity for every<br/>piece of evidence.</h1>
+            <p>
+                Organize cases, protect custody records, and keep your investigation moving.
+            </p>
+        </div>
+
+        <div class="assurance">
+            ✓ Private local database &nbsp;&nbsp; ✓ Tamper-aware workflow
+        </div>
+    </div>
+
+    <div class="login-card-wrap">
+        <form method="post" class="login-card">
+
+            <span class="eyebrow">WELCOME BACK</span>
+
+            <h1>Sign in</h1>
+
+            <p>Use your account to access the workspace.</p>
+
+            <div asp-validation-summary="ModelOnly" class="validation"></div>
+
+            <label>
+                Username
+                <input asp-for="Input.Username"
+                       id="username"
+                       autocomplete="username"
+                       placeholder="Enter your username"
+                       autofocus />
+            </label>
+
+            <label>
+                Password
+                <input asp-for="Input.Password"
+                       id="password"
+                       type="password"
+                       autocomplete="current-password"
+                       placeholder="Enter your password" />
+            </label>
+
+            <label class="check">
+                <input asp-for="Input.RememberMe"/>
+                Keep me signed in
+            </label>
+
+            <button class="primary" type="submit">
+                Sign in <span>→</span>
+            </button>
+
+            <div class="demo">
+                <div class="demo-heading">
+                    <div>
+                        <span class="demo-label">QUICK ACCESS</span>
+                        <b>Demo accounts</b>
+                    </div>
+                    <span class="demo-badge">5 ROLES</span>
+                </div>
+
+                <div class="demo-accounts">
+
+                    <button type="button"
+                            class="demo-account"
+                            onclick="useDemo('admin', 'Admin@123!', this)">
+                        <span class="demo-icon">A</span>
+                        <span class="demo-info">
+                            <strong>Administrator</strong>
+                            <small>Full system access</small>
+                        </span>
+                        <span class="demo-arrow">→</span>
+                    </button>
+
+                    <button type="button"
+                            class="demo-account"
+                            onclick="useDemo('investigator', 'Investigator@123!', this)">
+                        <span class="demo-icon">I</span>
+                        <span class="demo-info">
+                            <strong>Investigator</strong>
+                            <small>Case investigation</small>
+                        </span>
+                        <span class="demo-arrow">→</span>
+                    </button>
+
+                    <button type="button"
+                            class="demo-account"
+                            onclick="useDemo('evidence', 'Evidence@123!', this)">
+                        <span class="demo-icon">E</span>
+                        <span class="demo-info">
+                            <strong>Evidence Custodian</strong>
+                            <small>Evidence management</small>
+                        </span>
+                        <span class="demo-arrow">→</span>
+                    </button>
+
+                    <button type="button"
+                            class="demo-account"
+                            onclick="useDemo('auditor', 'Auditor@123!', this)">
+                        <span class="demo-icon">Au</span>
+                        <span class="demo-info">
+                            <strong>Auditor</strong>
+                            <small>Audit &amp; review</small>
+                        </span>
+                        <span class="demo-arrow">→</span>
+                    </button>
+
+                    <button type="button"
+                            class="demo-account demo-account-wide"
+                            onclick="useDemo('forensic', 'Forensic@123!', this)">
+                        <span class="demo-icon">F</span>
+                        <span class="demo-info">
+                            <strong>Forensic Analyst</strong>
+                            <small>Digital forensic analysis</small>
+                        </span>
+                        <span class="demo-arrow">→</span>
+                    </button>
+
+                </div>
+
+                <div class="demo-footer">
+                    <span class="demo-status" id="demoStatusDot"></span>
+                    <span id="demoFooterText">Select a role to auto-fill its credentials</span>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</section>
+
+<script>
+    function useDemo(username, password, btn) {
+        document.getElementById("username").value = username;
+        document.getElementById("password").value = password;
+        document.getElementById("password").focus();
+
+        document.querySelectorAll(".demo-account").forEach(function (el) {
+            el.classList.remove("is-selected");
+        });
+
+        var statusDot = document.getElementById("demoStatusDot");
+        var footerText = document.getElementById("demoFooterText");
+
+        if (btn) {
+            btn.classList.add("is-selected");
+
+            var roleName = btn.querySelector(".demo-info strong");
+            if (footerText) {
+                footerText.textContent = (roleName ? roleName.textContent : "Role") + " credentials filled — ready to sign in";
+            }
+        }
+
+        if (statusDot) {
+            statusDot.classList.remove("is-active");
+            void statusDot.offsetWidth; // restart the pulse animation
+            statusDot.classList.add("is-active");
+        }
+    }
+</script>
