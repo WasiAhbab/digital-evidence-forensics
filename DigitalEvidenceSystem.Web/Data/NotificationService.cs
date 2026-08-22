@@ -31,4 +31,4 @@ public sealed class NotificationService(EvidenceDbContext db)
 
         await db.SaveChangesAsync();
     }
-}
+} // Notified

@@ -157,3 +157,4 @@ public sealed class AuditLog
     [StringLength(80)] public string IpAddress { get; set; } = "";
     public DateTime OccurredAt { get; set; } = DateTime.Now;
 }
+//Almost all EnTities

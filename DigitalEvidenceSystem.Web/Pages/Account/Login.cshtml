@@ -72,61 +72,81 @@
                     <span class="demo-badge">5 ROLES</span>
                 </div>
 
-                <div class="demo-accounts">
+                <div class="demo-accounts" role="group" aria-label="Demo account quick access">
 
                     <button type="button"
                             class="demo-account"
+                            aria-pressed="false"
                             onclick="useDemo('admin', 'Admin@123!', this)">
                         <span class="demo-icon">A</span>
                         <span class="demo-info">
                             <strong>Administrator</strong>
                             <small>Full system access</small>
                         </span>
-                        <span class="demo-arrow">→</span>
+                        <span class="demo-state">
+                            <span class="demo-arrow">→</span>
+                            <span class="demo-check">✓</span>
+                        </span>
                     </button>
 
                     <button type="button"
                             class="demo-account"
+                            aria-pressed="false"
                             onclick="useDemo('investigator', 'Investigator@123!', this)">
                         <span class="demo-icon">I</span>
                         <span class="demo-info">
                             <strong>Investigator</strong>
                             <small>Case investigation</small>
                         </span>
-                        <span class="demo-arrow">→</span>
+                        <span class="demo-state">
+                            <span class="demo-arrow">→</span>
+                            <span class="demo-check">✓</span>
+                        </span>
                     </button>
 
                     <button type="button"
                             class="demo-account"
+                            aria-pressed="false"
                             onclick="useDemo('evidence', 'Evidence@123!', this)">
                         <span class="demo-icon">E</span>
                         <span class="demo-info">
                             <strong>Evidence Custodian</strong>
                             <small>Evidence management</small>
                         </span>
-                        <span class="demo-arrow">→</span>
+                        <span class="demo-state">
+                            <span class="demo-arrow">→</span>
+                            <span class="demo-check">✓</span>
+                        </span>
                     </button>
 
                     <button type="button"
                             class="demo-account"
+                            aria-pressed="false"
                             onclick="useDemo('auditor', 'Auditor@123!', this)">
                         <span class="demo-icon">Au</span>
                         <span class="demo-info">
                             <strong>Auditor</strong>
                             <small>Audit &amp; review</small>
                         </span>
-                        <span class="demo-arrow">→</span>
+                        <span class="demo-state">
+                            <span class="demo-arrow">→</span>
+                            <span class="demo-check">✓</span>
+                        </span>
                     </button>
 
                     <button type="button"
                             class="demo-account demo-account-wide"
+                            aria-pressed="false"
                             onclick="useDemo('forensic', 'Forensic@123!', this)">
                         <span class="demo-icon">F</span>
                         <span class="demo-info">
                             <strong>Forensic Analyst</strong>
                             <small>Digital forensic analysis</small>
                         </span>
-                        <span class="demo-arrow">→</span>
+                        <span class="demo-state">
+                            <span class="demo-arrow">→</span>
+                            <span class="demo-check">✓</span>
+                        </span>
                     </button>
 
                 </div>
@@ -149,6 +169,7 @@
 
         document.querySelectorAll(".demo-account").forEach(function (el) {
             el.classList.remove("is-selected");
+            el.setAttribute("aria-pressed", "false");
         });
 
         var statusDot = document.getElementById("demoStatusDot");
@@ -156,6 +177,7 @@
 
         if (btn) {
             btn.classList.add("is-selected");
+            btn.setAttribute("aria-pressed", "true");
 
             var roleName = btn.querySelector(".demo-info strong");
             if (footerText) {
